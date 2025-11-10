@@ -21,7 +21,7 @@ const tooltip = d3.select("body")
 Promise.all([
   d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
   d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
-  d3.csv("mieko_data/final_data/wildfires_combined.csv")
+  d3.csv("wildfires_combined.csv")
 ]).then(([world, us, data]) => {
 
   // Parse and clean data
