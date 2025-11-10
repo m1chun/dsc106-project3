@@ -1,10 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3 SST Visualization</title>
+  <meta charset="UTF-8">
+  <title>Wildfire Visualization</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fafafa;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 1rem;
+    }
+    #container {
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      gap: 20px;
+      align-items: stretch; /* ensure both children are same height */
+    }
+    .map-container, .line-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .map-container { flex: 2; } /* map is wider */
+    .line-container { flex: 1; } /* line chart narrower */
+    
+    /* Make both SVGs fill their container */
+    svg {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #ccc;
+      background: #eef;
+    }
+
+    /* Slider styling */
+    .slider {
+      width: 100%;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #timeSlider {
+      width: 100%;
+      height: 20px; /* bigger slider */
+    }
+    #currentDate {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 4px 8px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    /* General paragraph styling */
+body p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1000px;
+  margin: 1em auto; /* centers and adds vertical spacing */
+  text-align: justify;
+}
+
+/* Section headers styling */
+h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+  text-align: center;
+}
+
+/* Add subtle separation between sections */
+h2 + p {
+  margin-top: 0.5rem;
+}
+
+/* Highlight key phrases if needed */
+body p strong {
+  color: #d64541;
+}
+
+/* Optional: add soft background for bottom section */
+.writing{
+  background: #fefefe;
+  margin-top: 2%;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: justify;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+</style>
 </head>
 <body>
+
+  <h2>Exploring Summer 2024 Wildfires Across The United States (VIIRS Data)</h2>
+  <h3>By: David Goldstein, Margot Nissen, & Mieko Chun</h3>
+  <div id="container">
+    <div class="map-container">
+      <div class="slider">
+        <input type="range" id="timeSlider" min="0" max="0" step="1" value="0">
+        <p>Date: <span id="currentDate"></span></p>
+      </div>
+      <svg id="map"></svg>
+    </div>
+    <div class="line-container">
+      <svg id="line-chart"></svg>
+    </div>
+  </div>
+  <div class="writing">
+    <h2>Design Decisions</h2>
+    <p>We wanted to create a visualization that lets people track the lifecycles of fires in the US. We figured the most intuitive way to do that is to give people an overview of what fires exist over time and to give them the opportunity to track singular fires. The best way to do that is to plot every fire on an interactive map with a slider and to let users select which one they want to focus on and give them information to the right of the map. 
+  We considered a couple alternatives (eg. plotting different fires and their lifespan as lines on a line graph) but decided that those figures lacked a kind of big picture overview that you get from a map. It becomes a lot harder to intuitively compare different fires to each other when you can’t tell where they are. 
+  We also had to decide on a certain timeframe for our data since loading data about every fire in the US area over years and years would be too much for our figure to handle so we chose the hotter summer months (Jun-Aug) of last year as our window to look for fires.
+  Originally the size and color encodings on our graphs were redundant, now they display different information, but both serve to indicate the intensity of the fire. We binned our colors (like very good data scientists) and our dot size is a spectrum but we have a baseline size in the legend. 
+    </p>
+
+    <h2>Development Process</h2>
+    <p>We met up twice as group members to explore the dataset and create our visualizations. Our first meeting consisted of everyone gathering the data and exploring different ways of visualizing wildfire data. From there, we combined the idea of tracking wildfires in the United States over time and visualizing the lifecycle of individual fires. 
+    During our final group meeting, we all worked on the final visualization individually. Mieko’s visualization turned out the best after about an hour, so we partner-programmed on her computer until the visualizations looked how we envisioned it to be. While Mieko did the final touches on the visualization, David and Margot worked on the final write-up. 
+    The first meeting took approximately 2 hours and the final meeting was about 4 hours for a total of 6 hours worked on this project. Creating the final visualization took the most amount of time and learning how to use D3 was a big learning curve. Eventually, we all started to get the hang of the capacity of D3 and how it integrates with HTML and CSS. ChatGPT definitely accelerated the learning process. 
+    One issue we ran into during this process was that our line chart having intense spikes on certain days. We determined it to be caused by multiple measurements taken on the same day. To solve this, we took the average of the fire brightness for those days.
+    </p>
+</div>
+  <script src="final.js"></script>
 </body>
 </html>
